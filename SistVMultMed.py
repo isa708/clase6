@@ -49,44 +49,66 @@ class Mascota:
     def asignarLista_Medicamentos(self,n):
         self.__lista_medicamentos = n 
     
-class sistemaV:
+class sistemaV: #En lugar de una sola lista, almacenar en diccionarios separados
     def __init__(self):
-        self.__lista_mascotas = []
+        self.__caninos = {} #Diccionario para almacenar mascotas tipo "canino"
+        self.__felinos = {} #Diccionario para almacenar mascotas tipo "felino"
     
-    def verificarExiste(self,historia):
-        for m in self.__lista_mascotas:
-            if historia == m.verHistoria():
-                return True
-        #solo luego de haber recorrido todo el ciclo se retorna False
-        return False
+    #Método interno que retorna el diccionario correspondiente según el tipo de mascota
+    def __get_contenedor(self, tipo):
+        if tipo.lower() == "canino": 
+            return self.__caninos 
+        elif tipo.lower() == "felino":
+            return self.__felinos
+        else:
+            return False  # Tipo no válido
+    
+    def verificarExiste(self,historia, tipo):
+        #Verifica si una mascota con cierta historia existe en el tipo correspondiente
+        if tipo == "canino":
+            for clave in self.__caninos:
+                if clave == historia:
+                    return True
+        elif tipo == "felino":
+            for clave in self.__felinos:
+                if clave == historia:
+                    return True
+        return False #Si no se encuentra, retorna False
         
     def verNumeroMascotas(self):
-        return len(self.__lista_mascotas) 
+         return len(self.__caninos) + len(self.__felinos) 
     
     def ingresarMascota(self,mascota):
-        self.__lista_mascotas.append(mascota) 
+        tipo = mascota.verTipo().lower()
+        historia = mascota.verHistoria()
+        if tipo == "canino":
+            self.__caninos[historia] = mascota #Se almacena en el diccionario canino
+        elif tipo == "felino":
+            self.__felinos[historia] = mascota #Se almacena en el diccionario felino
    
-
+   
     def verFechaIngreso(self,historia):
-        #busco la mascota y devuelvo el atributo solicitado
-        for masc in self.__lista_mascotas:
-            if historia == masc.verHistoria():
-                return masc.verFecha() 
+        if historia in self.__caninos:
+            return self.__caninos[historia].verFecha()
+        elif historia in self.__felinos:
+            return self.__felinos[historia].verFecha()
         return None
 
     def verMedicamento(self,historia):
-        #busco la mascota y devuelvo el atributo solicitado
-        for masc in self.__lista_mascotas:
-            if historia == masc.verHistoria():
-                return masc.verLista_Medicamentos() 
+        if historia in self.__caninos:
+            return self.__caninos[historia].verLista_Medicamentos()
+        elif historia in self.__felinos:
+            return self.__felinos[historia].verLista_Medicamentos()
         return None
     
     def eliminarMascota(self, historia):
-        for masc in self.__lista_mascotas:
-            if historia == masc.verHistoria():
-                self.__lista_mascotas.remove(masc)  #opcion con el pop
-                return True  #eliminado con exito
-        return False 
+        if historia in self.__caninos:
+            del self.__caninos[historia]
+            return True
+        elif historia in self.__felinos:
+            del self.__felinos[historia]
+            return True
+        return False
 
 def main():
     servicio_hospitalario = sistemaV()
@@ -105,10 +127,14 @@ def main():
                 print("No hay espacio ...") 
                 continue
             historia=int(input("Ingrese la historia clínica de la mascota: "))
-            #   verificacion=servicio_hospitalario.verDatosPaciente(historia)
-            if servicio_hospitalario.verificarExiste(historia) == False:
+            tipo=input("Ingrese el tipo de mascota (felino o canino): ")
+            #Que no admita un tipo de animal diferente a los establecidos
+            if tipo != "canino" and tipo != "felino":
+                print("ERROR. el tipo ingresado no es válido. Debe ser 'canino' o 'felino'.")
+                continue
+
+            if not servicio_hospitalario.verificarExiste(historia, tipo):
                 nombre=input("Ingrese el nombre de la mascota: ")
-                tipo=input("Ingrese el tipo de mascota (felino o canino): ")
                 peso=int(input("Ingrese el peso de la mascota: "))
                 fecha=input("Ingrese la fecha de ingreso (dia/mes/año): ")
                 nm=int(input("Ingrese cantidad de medicamentos: "))

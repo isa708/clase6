@@ -1,4 +1,4 @@
-
+from datetime import datetime
 class Medicamento:
     def __init__(self):
         self.__nombre = "" 
@@ -129,7 +129,15 @@ def main():
             if not servicio_hospitalario.verificarExiste(historia, tipo):
                 nombre=input("Ingrese el nombre de la mascota: ")
                 peso=int(input("Ingrese el peso de la mascota: "))
-                fecha=input("Ingrese la fecha de ingreso (dia/mes/año): ")
+                while True:
+                    fecha = input("Ingrese la fecha de ingreso (dd/mm/aaaa): ")
+                    try:
+                        # Intentar parsear la fecha con el formato esperado
+                        datetime.strptime(fecha, "%d/%m/%Y")
+                        break  # Si no hay error, salir del ciclo
+                    except ValueError:
+                        print("ERROR. La fecha ingresada no tiene el formato correcto (dd/mm/aaaa). Intente nuevamente.")
+
                 nm=int(input("Ingrese cantidad de medicamentos: "))
                 
                 # Que no se repita el nombre de los medicamentos

@@ -1,3 +1,4 @@
+
 class Medicamento:
     def __init__(self):
         self.__nombre = "" 
@@ -54,14 +55,6 @@ class sistemaV: #En lugar de una sola lista, almacenar en diccionarios separados
         self.__caninos = {} #Diccionario para almacenar mascotas tipo "canino"
         self.__felinos = {} #Diccionario para almacenar mascotas tipo "felino"
     
-    #Método interno que retorna el diccionario correspondiente según el tipo de mascota
-    def __get_contenedor(self, tipo):
-        if tipo.lower() == "canino": 
-            return self.__caninos 
-        elif tipo.lower() == "felino":
-            return self.__felinos
-        else:
-            return False  # Tipo no válido
     
     def verificarExiste(self,historia, tipo):
         #Verifica si una mascota con cierta historia existe en el tipo correspondiente
@@ -86,7 +79,7 @@ class sistemaV: #En lugar de una sola lista, almacenar en diccionarios separados
         elif tipo == "felino":
             self.__felinos[historia] = mascota #Se almacena en el diccionario felino
    
-   
+
     def verFechaIngreso(self,historia):
         if historia in self.__caninos:
             return self.__caninos[historia].verFecha()

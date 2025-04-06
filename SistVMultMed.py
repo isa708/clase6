@@ -113,15 +113,20 @@ def main():
                 fecha=input("Ingrese la fecha de ingreso (dia/mes/año): ")
                 nm=int(input("Ingrese cantidad de medicamentos: "))
                 
+                # Que no se repita el nombre de los medicamentos
                 lista_med=[]
-                
+                nombres_medicamentos = set()  # Para evitar nombres repetidos
                 for i in range(0,nm):
                     nombre_medicamentos = input("Ingrese el nombre del medicamento: ")
+                    if nombre_medicamentos in nombres_medicamentos:
+                        print("ERORR. Ya existe un medicamento con ese nombre para esta mascota!!!!")
+                        continue
                     dosis =int(input("Ingrese la dosis: "))
                     medicamento = Medicamento()
                     medicamento.asignarNombre(nombre_medicamentos)
                     medicamento.asignarDosis(dosis)
                     lista_med.append(medicamento)
+                    nombres_medicamentos.add(nombre_medicamentos)  # Agregar el nombre a la lista de nombres únicos
 
                 mas= Mascota()
                 mas.asignarNombre(nombre)
